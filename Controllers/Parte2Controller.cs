@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProvaPub.Models;
 using ProvaPub.Services.Interfaces;
 
 namespace ProvaPub.Controllers
@@ -18,22 +17,31 @@ namespace ProvaPub.Controllers
 		}
 
         [HttpGet("products")]
-        public async Task<PagedList<Product>> ListProducts(int page)
+        public async Task<IActionResult> ListProducts(int page, int pageSize = 10)
         {
-			return await _productService.ListAsync(page, 10);
+
+            var products = await _productService.ListAsync(page, pageSize);
+
+            if (products.Items.Count != 0)
+            {
+                return Ok(products);
+            }
+
+            return NotFound();
         }
 
-        //      [HttpGet("customers")]
-        //public CustomerList ListCustomers(int page)
-        //{
-        //	var customerService = new CustomerService(_ctx);
-        //	return customerService.ListCustomers(page);
-        //}
-
         [HttpGet("customers")]
-        public async Task<PagedList<Customer>> ListCustomers(int page)
-        {
-            return await _customerService.ListAsync(page, 10);
+        public async Task<IActionResult> ListCustomers(int page, int pageSize = 10)
+        {   
+
+            var customers = await _customerService.ListAsync(page, pageSize);
+
+            if (customers.Items.Count != 0)
+            {
+                return Ok(customers);
+            }
+
+            return NotFound();
         }
     }
 }
