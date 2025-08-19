@@ -19,29 +19,50 @@ namespace ProvaPub.Controllers
         [HttpGet("products")]
         public async Task<IActionResult> ListProducts(int page, int pageSize = 10)
         {
-
-            var products = await _productService.ListAsync(page, pageSize);
-
-            if (products.Items.Count != 0)
+            try
             {
-                return Ok(products);
-            }
+                var products = await _productService.ListAsync(page, pageSize);
 
-            return NotFound();
+                if (products.Items.Count != 0)
+                {
+                    return Ok(products);
+                }
+
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("customers")]
         public async Task<IActionResult> ListCustomers(int page, int pageSize = 10)
-        {   
-
-            var customers = await _customerService.ListAsync(page, pageSize);
-
-            if (customers.Items.Count != 0)
+        {
+            try
             {
-                return Ok(customers);
-            }
 
-            return NotFound();
+                var customers = await _customerService.ListAsync(page, pageSize);
+
+                if (customers.Items.Count != 0)
+                {
+                    return Ok(customers);
+                }
+
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -18,18 +18,6 @@ namespace ProvaPub.Controllers
 	[Route("[controller]")]
 	public class Parte3Controller :  ControllerBase
 	{
-        //[HttpGet("orders")]
-        //public async Task<Order> PlaceOrder(string paymentMethod, decimal paymentValue, int customerId)
-        //{
-        //          var contextOptions = new DbContextOptionsBuilder<TestDbContext>()
-        //  .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Teste;Trusted_Connection=True;")
-        //  .Options;
-
-        //          using var context = new TestDbContext(contextOptions);
-
-        //          return await new OrderService(context).PayOrder(paymentMethod, paymentValue, customerId);
-        //}
-
         private readonly IOrderService _orderService;
 
         public Parte3Controller(IOrderService orderService)
@@ -38,14 +26,35 @@ namespace ProvaPub.Controllers
         }
 
         [HttpPost("orders")]
-        public async Task<IActionResult> PlaceOrder([FromBody] OrderRequest orderRequest)
+        public async Task<IActionResult> PlaceOrder([FromBody] OrderRequest request)
         {
-       
-            var order = await _orderService.PayOrder(orderRequest.paymentMethod,orderRequest.paymentValue,orderRequest.customerId);
+            try
+            {
+                var order = await _orderService.PayOrder(
+                    request.PaymentMethod,
+                    request.PaymentValue,
+                    request.CustomerId);
 
-            if (order != null) { return Ok(order); }
+                // Converte UTC para horário brasileiro (UTC-3)
+                var response = new OrderResponse
+                {
+                    Id = order.Id,
+                    Value = order.Value,
+                    CustomerId = order.CustomerId,
+                    OrderDate = order.OrderDate.AddHours(-3), // UTC para UTC-3
+                    PaymentMethod = request.PaymentMethod
+                };
 
-            return BadRequest();
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

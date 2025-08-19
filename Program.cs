@@ -13,6 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<RandomService>();
+builder.Services.AddScoped<IPaymentStrategy, PixPaymentStrategy>();
+builder.Services.AddScoped<IPaymentStrategy, CreditCardPaymentStrategy>();
+builder.Services.AddScoped<IPaymentStrategy, PayPalPaymentStrategy>();
+builder.Services.AddScoped<IPaymentStrategyFactory, PaymentStrategyFactory>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

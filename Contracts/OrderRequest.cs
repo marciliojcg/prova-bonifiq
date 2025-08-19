@@ -2,8 +2,8 @@
 {
     public class OrderRequest
     {
-        public string paymentMethod { get; set; }
-        public decimal paymentValue { get; set; }
-        public int customerId { get; set; }
+        public string PaymentMethod { get; set; }
+        public decimal PaymentValue { get; set; }
+        public int CustomerId { get; set; }
     }
 }
