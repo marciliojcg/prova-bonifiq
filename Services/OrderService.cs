@@ -12,34 +12,6 @@ namespace ProvaPub.Services
 
         protected override IQueryable<Order> GetBaseQuery() =>
            _ctx.Orders.OrderBy(p => p.Id);
-
-        //public async Task<Order> PayOrder(string paymentMethod, decimal paymentValue, int customerId)
-        //{   
-
-
-        //    if (paymentMethod == "pix")
-        //    {
-        //        //Faz pagamento...
-        //    }
-        //    else if (paymentMethod == "creditcard")
-        //    {
-        //        //Faz pagamento...
-        //    }
-        //    else if (paymentMethod == "paypal")
-        //    {
-        //        //Faz pagamento...
-        //    }
-
-        //    return await InsertOrder(new Order() //Retorna o pedido para o controller
-        //    {  
-        //        Value = paymentValue,
-        //        CustomerId = customerId,
-        //        OrderDate = DateTime.Now,
-
-        //    });
-
-        //}
-
         public async Task<Order> PayOrder(string paymentMethod, decimal paymentValue, int customerId)
         {
             // Obtém a estratégia de pagamento

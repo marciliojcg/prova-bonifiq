@@ -43,8 +43,11 @@ namespace ProvaPub.Services
 
         private static bool  ValidatePurchaseOnlyWorkingDays()
         {
+            int hourInitialWorkingDays = 8;
+            int hourFinalWorkingDays = 18;
+
             //Business Rule: A customer can purchases only during business hours and working days
-            if (DateTime.UtcNow.Hour < 8 || DateTime.UtcNow.Hour > 18 || DateTime.UtcNow.DayOfWeek == DayOfWeek.Saturday || DateTime.UtcNow.DayOfWeek == DayOfWeek.Sunday)
+            if (DateTime.UtcNow.Hour < hourInitialWorkingDays || DateTime.UtcNow.Hour > hourFinalWorkingDays || DateTime.UtcNow.DayOfWeek == DayOfWeek.Saturday || DateTime.UtcNow.DayOfWeek == DayOfWeek.Sunday)
                 return false;
             return true;
         }
