@@ -40,12 +40,17 @@ namespace ProvaPub.Services
                 bool exists = await ExistNumberInDatabase(number);
                 if (!exists)
                 {
-                    _ctx.Numbers.Add(new RandomNumber() { Number = number });
-                    await _ctx.SaveChangesAsync();
-                    return number;
+                    return await CreateNumberInDatabase(number);
                 }
             }
             while (true);
+        }
+
+        private async Task<int> CreateNumberInDatabase(int number)
+        {
+            _ctx.Numbers.Add(new RandomNumber() { Number = number });
+            await _ctx.SaveChangesAsync();
+            return number;
         }
 
         private async Task<bool> ExistNumberInDatabase(int number)
