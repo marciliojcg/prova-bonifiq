@@ -35,7 +35,7 @@ namespace ProvaPub.Tests
             _dbContext.Customers.AddRange(
                 new Customer { Id = 1, Name = "John Doe" },
                 new Customer { Id = 2, Name = "Jane Smith" },
-                new Customer { Id = 3, Name = "New Customer" } // No orders
+                new Customer { Id = 3, Name = "New Customer" } 
             );
 
             _dbContext.Orders.AddRange(
@@ -147,6 +147,32 @@ namespace ProvaPub.Tests
             Assert.True(result);
         }
 
-       
+
+        [Fact]
+        public void ValidatePurchaseOnlyWorkingDays_DuringBusinessHours_ReturnsTrue()
+        {
+            // Arrange - Simular horário comercial em dia útil
+            var mockDateTime = new DateTime(2024, 1, 15, 12, 0, 0); // Segunda-feira, 12:00
+
+            // Act
+            var result = _customerService.ValidatePurchaseOnlyWorkingDays(mockDateTime);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void ValidatePurchaseOnlyWorkingDays_OverBusinessHours_ReturnsFalse()
+        {
+            // Arrange - Simular horário comercial em dia não útil
+            var mockDateTime = new DateTime(2024, 1, 14, 12, 0, 0); // Domingo, 12:00
+
+            // Act
+            var result = _customerService.ValidatePurchaseOnlyWorkingDays(mockDateTime);
+
+            Assert.False(result);
+        }
+
+
+
     }
 }

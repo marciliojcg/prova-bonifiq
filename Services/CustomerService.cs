@@ -32,7 +32,7 @@ namespace ProvaPub.Services
                 return false;
             }
 
-            bool isPurchaseOnlyWorkingDays = ValidatePurchaseOnlyWorkingDays();
+            bool isPurchaseOnlyWorkingDays = ValidatePurchaseOnlyWorkingDays(DateTime.UtcNow);
             if (isPurchaseOnlyWorkingDays == false)
             {
                 return false;
@@ -41,13 +41,13 @@ namespace ProvaPub.Services
             return true;
         }
 
-        private static bool  ValidatePurchaseOnlyWorkingDays()
+        public bool  ValidatePurchaseOnlyWorkingDays(DateTime datePurchase)
         {
             int hourInitialWorkingDays = 8;
             int hourFinalWorkingDays = 18;
 
             //Business Rule: A customer can purchases only during business hours and working days
-            if (DateTime.UtcNow.Hour < hourInitialWorkingDays || DateTime.UtcNow.Hour > hourFinalWorkingDays || DateTime.UtcNow.DayOfWeek == DayOfWeek.Saturday || DateTime.UtcNow.DayOfWeek == DayOfWeek.Sunday)
+            if (datePurchase.Hour < hourInitialWorkingDays || datePurchase.Hour > hourFinalWorkingDays || datePurchase.DayOfWeek == DayOfWeek.Saturday || datePurchase.DayOfWeek == DayOfWeek.Sunday)
                 return false;
             return true;
         }
@@ -75,7 +75,7 @@ namespace ProvaPub.Services
         private async Task ExistCustomer(int customerId)
         {
             var customer = await _ctx.Customers.FindAsync(customerId);
-            if (customer == null) throw new InvalidOperationException($"Customer Id {customerId} does not exists");
+            if (customer == null) throw new InvalidOperationException($"Customer Id {customerId} não existe");
         }
     }
 }
